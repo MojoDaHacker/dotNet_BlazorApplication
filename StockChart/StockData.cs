@@ -44,11 +44,35 @@ namespace StockChart
                 Console.WriteLine(x.Key);
             }
         }
+        public List<float> getListOfClose()
+        {
+            var list = new List<float>();
+            foreach (var tick in TimeSeries.Values)
+            {
+                list.Add(tick.Close);
+            }
+            list.Reverse();
+            return list;
+        }
     }
     public class Ticks
     {
-        //[JsonPropertyName("2021-06-17")]
-        public Dictionary<string, float> Data { get; set; }
-            = new Dictionary<string, float>();
+        [JsonPropertyName("1. open")]
+        public float Open { get; set; }
+
+        [JsonPropertyName("2. high")]
+        public float High{ get; set; }
+
+        [JsonPropertyName("3. low")]
+        public float Low { get; set; }
+
+        [JsonPropertyName("4. close")]
+        public float Close { get; set; }
+
+        [JsonPropertyName("5. volume")]
+        public float Volume { get; set; }
+
+
+
     }
 }
