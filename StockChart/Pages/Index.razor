@@ -5,7 +5,7 @@
 @inject HttpClient Http;
 
 <div>
-    <input type="text" class="form-control" id="tickerInput" aria-describedby="tickerInput" placeholder="@placeholder">
+    <input type="text" class="form-control" @bind="Symbol" @bind:event="oninput" id="tickerInput" aria-describedby="tickerInput" placeholder="Search for a Stock...">
     <button @onclick="handleButtonClick" class="btn btn-primary">Search</button>
 </div>
 <div class="container">
@@ -14,7 +14,7 @@
             <div>
                 @if (currentStockOverview != null)
                 {
-                    <Chart Config="_config" @ref="_chart"></Chart>
+                    <Chart Config="_config"></Chart>
                 }
             </div>
         </div>
@@ -50,16 +50,16 @@
 
 @code {
     private LineConfig _config;
-    private Chart _chart;
+    public Chart _chart;
     private Stock currentStockData;
+    private string Symbol { get; set; }
     private Dictionary<string, string> currentStockOverview;
-    string placeholder = "Search for a stock...";
     static string API_KEY = "AOXEK538A6LQR341";
-    static string STOCK_QUERY_URL = $"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey={API_KEY}";
-    static string STOCKOVERVIEW_QUERY_URL = $"https://www.alphavantage.co/query?function=OVERVIEW&symbol=IBM&apikey={API_KEY}";
 
     async Task handleButtonClick()
     {
+        var STOCK_QUERY_URL = $"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={Symbol}&apikey={API_KEY}";
+        var STOCKOVERVIEW_QUERY_URL = $"https://www.alphavantage.co/query?function=OVERVIEW&symbol={Symbol}&apikey={API_KEY}";
         currentStockData = await Http.GetFromJsonAsync<Stock>(STOCK_QUERY_URL);
         currentStockOverview = await Http.GetFromJsonAsync<Dictionary<string, string>>(STOCKOVERVIEW_QUERY_URL);
         @*currentStockData.getTickCount();*@
